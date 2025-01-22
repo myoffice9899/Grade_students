@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรแกรมระบุเกรด</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e7f3e7;
+            border: 1px solid #d4edda;
+            color: #155724;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>โปรแกรมระบุเกรด</h2>
+        <label for="score">กรอกคะแนน:</label>
+        <input type="number" id="score" placeholder="ป้อนคะแนน (0-100)" min="0" max="100">
+        <button onclick="calculateGrade()">คำนวณเกรด</button>
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        function calculateGrade() {
+            const score = parseInt(document.getElementById('score').value);
+            let grade = '';
+
+            if (isNaN(score) || score < 0 || score > 100) {
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('result').innerText = 'กรุณากรอกคะแนนที่ถูกต้อง (0-100)';
+                return;
+            }
+
+            if (score >= 90) {
+                grade = 'A';
+            } else if (score >= 80) {
+                grade = 'B';
+            } else if (score >= 70) {
+                grade = 'C';
+            } else if (score >= 60) {
+                grade = 'D';
+            } else {
+                grade = 'F';
+            }
+
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').innerText = `คะแนนของคุณ: ${score} | เกรด: ${grade}`;
+        }
+    </script>
+</body>
+</html>
