@@ -13,13 +13,24 @@
             color: #333;
         }
         .container {
-            max-width: 400px;
+            max-width: 600px;
             margin: auto;
             padding: 20px;
             background: #fff;
             border: 1px solid #ddd;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .left {
+            width: 45%;
+        }
+        .right {
+            width: 45%;
         }
         input, button {
             width: 100%;
@@ -44,15 +55,47 @@
             color: #155724;
             border-radius: 5px;
         }
+        .grade-explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .grade-explanation h3 {
+            margin-top: 0;
+        }
+        .grade-explanation ul {
+            padding-left: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Calculate Grade</h2> 
-        <label for="score">Enter your score:</label>
-        <input type="number" id="score" placeholder="Enter Score (0-100)" min="0" max="100">
-        <button onclick="calculateGrade()">Calculate Grade</button>
-        <div id="result" class="result" style="display: none;"></div>
+        <h2>Calculate Grade</h2>
+        <div class="flex-container">
+            <!-- คำอธิบายเกรด -->
+            <div class="left">
+                <div class="grade-explanation">
+                    <h3>Grade Explanation</h3>
+                    <ul>
+                        <li><strong>A:</strong> 90-100 - Excellent</li>
+                        <li><strong>B:</strong> 80-89 - Good</li>
+                        <li><strong>C:</strong> 70-79 - Average</li>
+                        <li><strong>D:</strong> 60-69 - Below Average</li>
+                        <li><strong>F:</strong> Below 60 - Fail</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- การคำนวณเกรด -->
+            <div class="right">
+                <label for="score">Enter your score:</label>
+                <input type="number" id="score" placeholder="Enter Score (0-100)" min="0" max="100">
+                <button onclick="calculateGrade()">Calculate Grade</button>
+                <div id="result" class="result" style="display: none;"></div>
+            </div>
+        </div>
     </div>
 
     <script>
