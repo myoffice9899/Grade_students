@@ -3,131 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรแกรมระบุเกรด</title>
+    <title>Promotion Bugs</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
             padding: 0;
+        }
+        .promotion-info {
             background-color: #f4f4f9;
-            color: #333;
+            padding: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .promotion-info ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+        .promotion-info li {
+            margin-bottom: 5px;
+        }
+        .tabs {
+            display: flex;
+            background-color: #007bff;
+            padding: 10px;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .tab.active {
+            background-color: #0056b3;
+        }
+        .content {
+            display: none;
+            padding: 20px;
+        }
+        .content.active {
+            display: block;
         }
         .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .flex-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 20px;
-        }
-        .left, .right {
-            width: 48%;
-        }
-        input, button {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 16px;
+        }
+        .code-section, .code-section2, .solution-section {
+            flex: 1;
+            padding: 20px;
+        }
+        .code-section, .code-section2 {
+            background-color: #f9f9f9;
+            border-right: 2px solid #ddd;
+        }
+        .solution-section {
+            text-align: center;
         }
         button {
-            background-color: #4CAF50;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
             color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
-        .result {
+        .explanation {
+            display: none;
+            margin-top: 20px;
+            background-color: #f4f4f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-section {
+            margin-top: 20px;
+        }
+        .form-section input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-section .result {
             margin-top: 10px;
             padding: 10px;
-            background: #e7f3e7;
-            border: 1px solid #d4edda;
-            color: #155724;
+            background-color: #f4f4f9;
+            border: 1px solid #ddd;
             border-radius: 5px;
-        }
-        .grade-explanation {
-            padding: 15px;
-            background: #f9f9f9;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .grade-explanation h3 {
-            margin-top: 0;
-        }
-        .grade-explanation ul {
-            padding-left: 20px;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .left, .right {
-                width: 100%;
-            }
         }
     </style>
+    <script>
+       function showTab(tabIndex) {
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.content');
+    tabs.forEach((tab, index) => {
+        tab.classList.toggle('active', index + 1 === tabIndex);
+        contents[index].classList.toggle('active', index + 1 === tabIndex);
+    });
+}
+
+        function showExplanation(tabIndex) {
+            const explanation = document.getElementById(`explanation${tabIndex}`);
+            explanation.style.display = 'block';
+        }
+
+        function calculateDiscount(tabIndex) {
+            const input = document.getElementById(`input${tabIndex}`);
+            const result = document.getElementById(`result${tabIndex}`);
+            const amount = parseFloat(input.value);
+
+            if (tabIndex === 1) {
+                // Tab 1 Bug: Button does nothing
+                return; // No calculation occurs
+            }
+
+            if (isNaN(amount) || amount <= 0) {
+                result.textContent = "กรุณากรอกจำนวนเงินที่ถูกต้อง";
+                return;
+            }
+
+            if (tabIndex === 2) {
+                // Tab 2 Bug: Incorrect discount for 10,000
+                let discountRate;
+                if (amount >= 10000000) {
+                    discountRate = 5;
+                } else if (amount >= 1000000) {
+                    discountRate = 4.5;
+                } else if (amount >= 100000) {
+                    discountRate = 4a;
+                } else if (amount >= 10000) {
+                    discountRate = 2;
+                } else if (amount >= 1000) {
+                    discountRate = 3;
+                } else {
+                    discountRate = 0;
+                }
+                const discount = (amount * discountRate) / 100;
+                const total = amount - discount;
+                result.textContent = `ส่วนลด: ${discountRate}% (${discount.toFixed(2)} บาท), ยอดชำระ: ${total.toFixed(2)} บาท`;
+                return;
+            }
+
+            if (tabIndex === 3) {
+                // Tab 3 Bug: No total displayed
+                const discountRate = 3;
+                const discount = (amount * discountRate) / 100;
+                result.textContent = `ส่วนลด: ${discountRate}% (${discount.toFixed(2)} บาท)`; // Missing total
+                return;
+            }
+
+            if (tabIndex === 4) {
+                // Tab 4 Bug: Error for amounts below 1,000
+                if (amount < 1000) {
+                    result.textContent = "ระบบไม่เข้าร่วมรายการ";
+                    return;
+                }
+                const discountRate = 3;
+                const discount = (amount * discountRate) / 100;
+                const total = amount - discount;
+                result.textContent = `ส่วนลด: ${discountRate}% (${discount.toFixed(2)} บาท), ยอดชำระ: ${total.toFixed(2)} บาท`;
+                return;
+            }
+
+            if (tabIndex === 5) {
+                // Tab 5 Bug: General error message
+                result.textContent = "ระบบทำงานผิดพลาด";
+                return;
+            }
+
+            let discountRate = 0;
+
+            if (amount >= 10000000) {
+                discountRate = 5;
+            } else if (amount >= 1000000) {
+                discountRate = 4.5;
+            } else if (amount >= 100000) {
+                discountRate = 4;
+            } else if (amount >= 10000) {
+                discountRate = 3.5;
+            } else if (amount >= 1000) {
+                discountRate = 3;
+            }
+
+            const discount = (amount * discountRate) / 100;
+            const total = amount - discount;
+
+            result.textContent = `ส่วนลด: ${discountRate}% (${discount.toFixed(2)} บาท), ยอดชำระ: ${total.toFixed(2)} บาท`;
+        }
+    </script>
 </head>
 <body>
-    <div class="container">
-        <h2>Calculate Grade</h2>
-        <div class="flex-container">
-            <!-- คำอธิบายเกรด -->
-            <div class="left">
-                <div class="grade-explanation">
-                    <h3>Grade Explanation</h3>
-                    <ul>
-                        <li><strong>A:</strong> 90-100 - Excellent</li>
-                        <li><strong>B:</strong> 80-89 - Good</li>
-                        <li><strong>C:</strong> 70-79 - Average</li>
-                        <li><strong>D:</strong> 60-69 - Below Average</li>
-                        <li><strong>F:</strong> Below 60 - Fail</li>
-                    </ul>
+    <div class="promotion-info">
+        <h2>ข้อมูลโปรโมชั่น</h2>
+        <ul>
+            <li>ซื้อครบ 1,000 บาท ลด 3%</li>
+            <li>ซื้อครบ 10,000 บาท ลด 3.5%</li>
+            <li>ซื้อครบ 100,000 บาท ลด 2%</li>
+            <li>ซื้อครบ 1,000,000 บาท ลด 4.5%</li>
+            <li>ซื้อครบ 10,000,000 บาท ลด 5%</li>
+        </ul>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="showTab(1)">Tab 1</div>
+        <div class="tab" onclick="showTab(2)">Tab 2</div>
+        <div class="tab" onclick="showTab(3)">Tab 3</div>
+        <div class="tab" onclick="showTab(4)">Tab 4</div>
+        <div class="tab" onclick="showTab(5)">Tab 5</div>
+    </div>
+
+    <div class="content active" id="tab1">
+        <div class="container">
+            <div class="code-section">
+                <h2>Tab 1: เจอ bug กดปุ่ม แล้วไม่คำนวณ</h2>
+                <pre>
+function calculate() {
+    // ไม่มีโค้ดสำหรับการคำนวณ
+}
+                </pre>
+            </div>
+            <div class="code-section2">
+                <h2>ตัวอย่างโปรแกรม</h2>
+                <div class="form-section">
+                    <input type="number" id="input1" placeholder="กรอกจำนวนเงิน">
+                    <button onclick="calculateDiscount(1)">คำนวณ</button>
+                    <div class="result" id="result1"></div>
                 </div>
             </div>
-
-            <!-- การคำนวณเกรด -->
-            <div class="right">
-                <label for="score">Enter your score:</label>
-                <input type="number" id="score" placeholder="Enter Score (0-100)" min="0" max="100">
-                <button onclick="calculateGrade()">Calculate Grade</button>
-                <div id="result" class="result" style="display: none;"></div>
+            <div class="solution-section">
+                <button onclick="showExplanation(1)">เฉลย</button>
+                <div class="explanation" id="explanation1">
+                    <p>โค้ดไม่มีฟังก์ชันสำหรับการคำนวณ ทำให้กดปุ่มแล้วไม่เกิดอะไรขึ้น</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        function calculateGrade() {
-            const score = parseInt(document.getElementById('score').value);
-            let grade = '';
+    <div class="content" id="tab2">
+        <div class="container">
+            <div class="code-section">
+                <h2>Tab 2: คำนวณยอด 10000 ผิดพลาด โดยยังได้รับเป็นโปรโมชั่น 2 %</h2>
+                <pre>
+function calculate(amount) {
+    if (amount >= 10000) {
+        return amount * 0.02; // ส่วนลดผิดพลาด
+    }
+}
+                </pre>
+            </div>
+            <div class="code-section2">
+                <h2>ตัวอย่างโปรแกรม</h2>
+                <div class="form-section">
+                    <input type="number" id="input2" placeholder="กรอกจำนวนเงิน">
+                    <button onclick="calculateDiscount(2)">คำนวณ</button>
+                    <div class="result" id="result2"></div>
+                </div>
+            </div>
+            <div class="solution-section">
+                <button onclick="showExplanation(2)">เฉลย</button>
+                <div class="explanation" id="explanation2">
+                    <p>โค้ดกำหนดส่วนลดผิดพลาดสำหรับยอดซื้อ 10,000 บาท ซึ่งควรได้รับส่วนลด 3.5%</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            if (isNaN(score) || score < 0 || score > 100) {
-                document.getElementById('result').style.display = 'block';
-                document.getElementById('result').innerText = 'กรุณากรอกคะแนนที่ถูกต้อง (0-100)';
-                return;
-            }
+    <div class="content" id="tab3">
+        <div class="container">
+            <div class="code-section">
+                <h2>Tab 3: กดคำนวณได้ แต่ไม่แสดง ยอดที่ต้องจ่ายทั้งหมด</h2>
+                <pre>
+function calculate(amount) {
+    const discount = amount * 0.03;
+    // ไม่มีการแสดงผลยอดที่ต้องจ่าย
+}
+                </pre>
+            </div>
+            <div class="code-section2">
+                <h2>ตัวอย่างโปรแกรม</h2>
+                <div class="form-section">
+                    <input type="number" id="input3" placeholder="กรอกจำนวนเงิน">
+                    <button onclick="calculateDiscount(3)">คำนวณ</button>
+                    <div class="result" id="result3"></div>
+                </div>
+            </div>
+            <div class="solution-section">
+                <button onclick="showExplanation(3)">เฉลย</button>
+                <div class="explanation" id="explanation3">
+                    <p>โค้ดไม่ได้แสดงผลรวมหลังหักส่วนลด ทำให้ผู้ใช้ไม่ทราบยอดที่ต้องจ่าย</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            if (score >= 90) {
-                grade = 'A';
-            } else if (score >= 80) {
-                grade = 'B';
-            } else if (score >= 70) {
-                grade = 'C';
-            } else if (score >= 60) {
-                grade = 'D';
-            } else {
-                grade = 'F';
-            }
+    <div class="content" id="tab4">
+        <div class="container">
+            <div class="code-section">
+                <h2>Tab 4: กรอกน้อยกว่า 1000 เจอ error ระบบไม่เข้าร่วมรายการ</h2>
+                <pre>
+function calculate(amount) {
+    if (amount < 1000) {
+        throw new Error('ระบบไม่เข้าร่วมรายการ');
+    }
+}
+                </pre>
+            </div>
+            <div class="code-section2">
+                <h2>ตัวอย่างโปรแกรม</h2>
+                <div class="form-section">
+                    <input type="number" id="input4" placeholder="กรอกจำนวนเงิน">
+                    <button onclick="calculateDiscount(4)">คำนวณ</button>
+                    <div class="result" id="result4"></div>
+                </div>
+            </div>
+            <div class="solution-section">
+                <button onclick="showExplanation(4)">เฉลย</button>
+                <div class="explanation" id="explanation4">
+                    <p>โค้ดแสดงข้อผิดพลาดเมื่อยอดซื้อน้อยกว่า 1,000 บาท ซึ่งเป็นการปฏิเสธไม่เข้าร่วมโปรโมชั่น</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            document.getElementById('result').style.display = 'block';
-            document.getElementById('result').innerText = `คะแนนของคุณ: ${score} | เกรด: ${grade}`;
-        }
-    </script>
+    <div class="content" id="tab5">
+        <div class="container">
+            <div class="code-section">
+                <h2>Tab 5: แสดงผล ระบบทำงานผิดพลาด</h2>
+                <pre>
+function calculate() {
+    throw new Error('ระบบทำงานผิดพลาด');
+}
+                </pre>
+            </div>
+            <div class="code-section2">
+                <h2>ตัวอย่างโปรแกรม</h2>
+                <div class="form-section">
+                    <input type="number" id="input5" placeholder="กรอกจำนวนเงิน">
+                    <button onclick="calculateDiscount(5)">คำนวณ</button>
+                    <div class="result" id="result5"></div>
+                </div>
+            </div>
+            <div class="solution-section">
+                <button onclick="showExplanation(5)">เฉลย</button>
+                <div class="explanation" id="explanation5">
+                    <p>โค้ดแสดงข้อความทั่วไปว่า "ระบบทำงานผิดพลาด" โดยไม่ได้ระบุสาเหตุที่แท้จริง</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
